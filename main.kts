@@ -3,15 +3,91 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
+fun whenFn(x: Any): String {
+    when (x) {
+        "Hello" -> return "world"
+        is String -> return "Say what?"
+        0 -> return "zero"
+        1 -> return "one"
+        in 2..10 -> return "low number"
+        is Int -> return "a number"
+    };
+    return "I don't understand"
+}
 
 // write an "add" function that takes two Ints, returns an Int, and adds the values
+fun add(num1: Int, num2: Int): Int {
+    return num1 + num2
+}
+
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(num1: Int, num2: Int): Int {
+    return num1 - num2
+}
+
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+fun mathOp(num1: Int, num2: Int, body: (x: Int, y: Int) -> Int): Int {
+    return body(num1, num2)
+}
 
 // write a class "Person" with first name, last name and age
+class Person (var firstName: String, var lastName: String, var age: Int) {
+    val debugString: String by lazy {
+        "[Person firstName:${this.firstName} lastName:${this.lastName} age:${this.age}]"
+    }
+}
 
 // write a class "Money"
+class Money {
+  var amount : Int 
+  var currency : String
 
+  constructor(amount: Int, currency: String) {
+    this.amount = amount
+    this.currency = currency
+  }
+
+  operator fun plus(newMoney: Money): Money {
+      if (this.currency != newMoney.currency) {
+          return Money(this.amount + newMoney.convert(this.currency).amount, this.currency)
+      }
+      return Money(this.amount + newMoney.amount, this.currency)
+  }
+
+  fun convert(type: String): Money {
+    when (type) {
+        "USD" -> {
+            when(this.currency) {
+                "GBP" -> return Money((this.amount * 2), "GBP")
+                "EUR" -> return Money((this.amount * 2 / 3), "EUR")
+                "CAN" -> return Money((this.amount * 4 / 5), "CAN")
+            }
+        }
+        "EUR" -> {
+            when(this.currency) {
+                "GBP" -> return Money((this.amount * 3), "GBP")
+                "USD" -> return Money((this.amount * 3 / 2), "EUR")
+                "CAN" -> return Money((this.amount * 8 / 15), "CAN")
+            }
+        }
+        "CAN" -> {
+            when(this.currency) {
+                "GBP" -> return Money((this.amount * 2 / 5), "GBP")
+                "EUR" -> return Money((this.amount * 15 / 8), "EUR")
+                "USD" -> return Money((this.amount * 5 / 4), "CAN")
+            }
+        }
+        "GBP" -> {
+            when(this.currency) {
+                "USD" -> return Money((this.amount / 2), "GBP")
+                "EUR" -> return Money((this.amount / 3), "EUR")
+                "CAN" -> return Money((this.amount * 2 / 5), "CAN")  
+            }
+        }
+    }
+    return Money(this.amount, this.currency)
+  }
+}
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
 print("When tests: ")
